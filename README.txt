@@ -97,12 +97,12 @@ You can also request public posts from an account using the same RSS that powers
 
 == REQUIREMENTS:
 
-* Mechanize & HTTParty
+* Nokogiri & HTTParty
 * Mocha (for tests)
 
 == INSTALL:
 
-* sudo gem install glue -include-dependencies
+* sudo gem install glue
 
 == LICENSE:
 
