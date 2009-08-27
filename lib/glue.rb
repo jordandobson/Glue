@@ -1,11 +1,10 @@
 require 'rubygems'
 require 'httparty'
-require 'nokogiri'
 require 'open-uri'
 
 module Glue
 
-  VERSION = '1.0.3'
+  VERSION = '1.0.4'
   DOMAIN  = 'gluenow.com'
 
   class AuthError < StandardError;                   end
@@ -15,6 +14,8 @@ module Glue
   
     POST   = '/api/post'
     USER   = '/api/user'
+    
+    attr_accessor :site
 
     def initialize subdomain, user, pass
       raise  AuthError, 'Username, Password or Account subdomain is blank.' \
@@ -25,7 +26,7 @@ module Glue
     end
 
     def valid_site?
-      Nokogiri::HTML(open("http://#{@site}")).at('body#login') ? true : false
+      login_page.match(/<body[^>]*id=["']login["']/) ? true : false
     end
 
     def user_info
@@ -42,6 +43,12 @@ module Glue
         :author     =>  opts.include?( :author )  },
         :basic_auth =>  @auth
       )
+    end
+ 
+  private
+    
+    def login_page
+      open("http://#{@site}").read
     end
 
   end

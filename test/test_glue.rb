@@ -20,6 +20,7 @@ class TestGlue < Test::Unit::TestCase
     @guid       = "#{@lurl}##{@id}"
     @guid2      = "#{@lurl}##{@id2}"
     @author     = "Jordan"
+    @login_html = '<html><body id="login"></body></html>'
     
     @resp_fail  = {}
     
@@ -116,12 +117,12 @@ class TestGlue < Test::Unit::TestCase
   end
 
   def test_site_is_valid
-    OpenURI.stubs(:open_uri).returns('<body id="login"></body>')
+    @client.stubs(:login_page).returns('<html><body id="login"></body></html>')
     assert    @client.valid_site?
   end
 
   def test_site_is_invalid
-    OpenURI.stubs(:open_uri).returns('<body></body>')
+    @client.stubs(:login_page).returns('<html><body></body></html>')
     assert   !@client.valid_site?
   end
 
