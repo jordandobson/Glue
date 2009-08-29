@@ -30,11 +30,17 @@ module Glue
     end
 
     def user_info
-      self.class.post(USER, :query => {}, :basic_auth => @auth)
+      response = self.class.post(
+        USER,
+        :query      => {},
+        :basic_auth => @auth
+      )
+      response['rsp'] ? response : {}
+
     end
 
     def post title, body, *opts
-      self.class.post(
+      response = self.class.post(
         POST,
         :query      =>  {
         :title      =>  title,
@@ -43,6 +49,8 @@ module Glue
         :author     =>  opts.include?( :author )  },
         :basic_auth =>  @auth
       )
+      response['rsp'] ? response : {}
+      
     end
  
   private

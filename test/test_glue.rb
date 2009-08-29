@@ -20,9 +20,9 @@ class TestGlue < Test::Unit::TestCase
     @guid       = "#{@lurl}##{@id}"
     @guid2      = "#{@lurl}##{@id2}"
     @author     = "Jordan"
-    @login_html = '<html><body id="login"></body></html>'
     
     @resp_fail  = {}
+    @resp_html  = {"html"=>{"head"=>{"title" => "GLUE | Web + Mobile Publishing"}}}
     
     @resp_ok    = { "rsp"     => {
                     "user"    => {
@@ -137,13 +137,13 @@ class TestGlue < Test::Unit::TestCase
   end
 
   def test_user_info_invalid
-    Glue::API.stubs(:post).returns(@resp_fail)
+    Glue::API.stubs(:post).returns(@resp_html)
     actual       = @client.user_info
     assert_equal   @resp_fail, actual
   end
 
   def test_bad_post_response
-    Glue::API.stubs(:post).returns(@resp_fail)
+    #Glue::API.stubs(:post).returns(@resp_html)
     actual       = @client.post(@title, @body)
     assert_equal   @resp_fail, actual
   end
