@@ -1,108 +1,92 @@
 = glue
 
-http://Glue.RubyForge.org
-
 http://GlueNow.com
 
 == DESCRIPTION:
 
-The Glue gem enables posting to GlueNow.com API service using an account subdomain, username, password. In this version you can add a post by providing a title, body, optional author name and optional private settings. You can also access some basic info about a users account and check if their account info is valid.
-
-You can also request public posts from an account using the same RSS that powers the many Glue feeds.
+The Glue gem enables posting to GlueNow.com API service using an account subdomain, username, password. In this version you can add a post by providing a title and body. You can access some basic info about a users account and check if their account info is valid and request public posts from an account using the same RSS that powers many of the Glue feeds.
 
 == FEATURES/PROBLEMS:
 
-* To Add a new post Title & Body text must be included
-* Access info about an account with successful login:
-  * Email Address
-  * If they are an admin
-  * Thier Author Name
-* Can check if a subdomain is valid and belongs to an account
-* Read all public posts
-* This Gem is throughly tested
-* Adding & Reading posts Only at this time
-* You can't editor delete a posts yet
-* No way to verify if a post has accepted the author name yet
+
+  Adding new posts requires Title & Body text
+  Access info about an account with successful login:
+    * Email Address
+    * If they are an admin
+    * Their Author Name
+  Check a subdomain is valid and belongs to an account
+  Read all public posts
+  Gem is thoroughly tested
+  Only allows Adding & Reading posts at this time
+  You can't edit or delete posts
 
 
 == SYNOPSIS:
 
----- Adding Posts ----
+TO ADD A POST USING THE GLUENOW.COM API
 
-1. Instantiate your account
-
-    * Provide the subdomain, username and password for http://Your-Account.GlueNow.com
+  1. Instantiate your account - Provide subdomain, username and password of http://Your-Subdomain.GlueNow.com Account
     
-        account = Glue::API.new( "your-account", "j-username", "j-password" )
+        account = Glue::API.new("your-subdomain", "your-username", "your-password")
         
-2. Check if the account subdomain is valid
+  2. Check if the account subdomain is valid
   
         account.valid_site?   
         
-3. Get more info about the user's account
+  3. Get more info about the user's account
     
-        response = account.user_info
+        user = account.user_info
         
-        response #=> {"rsp"=>{"user"=>{"author"=>"Jordan Dobson","admin"=>"true","email"=>"jordandobson@gmail.com"},"stat"=>"ok"}}
+        user #=> {"rsp"=>{"user"=>{"author"=>"Jordan Dobson","admin"=>"true","email"=>"jordandobson@gmail.com"},"stat"=>"ok"}}
         
-4. Post your Content
-
-    * Both Title and Body are required - Set to a variable to check the response
+  4. Post Your Content - Title & Body are required
     
-        response = account.post("My Title", "My Body")
+        response = account.post("My Title", "Body Text")
         
-    * You can also choose to set the post as private and/or use the optional Author Name
-    * In this example we set false for not private and true to use the author name
-    
-        response = account.post("My Title", "My Body", false, true) 
-        
+  5. Receive a Success or Error Hash
 
-5. Get a success or error hash back
-
-    * A Successful response would look like this
+      SUCCESS
     
         response #=> {"rsp"=>{"post"=>{"title"=>"My Title","url"=>"http://bit.ly/sakIM","id"=>"14415","longurl"=>"http://jordandobson.com"},"stat"=>"ok"}}
     
-    * A Error response would be empty like this
+      ERROR
     
         response #=> {}
-
----- Reading Posts ----
         
-1. Instantiate your Reader with your account info
-
-    * Provide the subdomain for http://Your-Account.GlueNow.com
-    
-        account = Glue::RSS.new( "your-account" )
         
-2. Request posts from the RSS feed
-
-    * If you want all of them don't include any limiting or range. Defaults to up to 999 posts on one page
-    
-        response = account.feed
+TO READ POSTS USING GLUENOW.COM RSS
         
-    * If you want to limit the results include a limit (1-999) and which page (used for paging)
-
-        response = account.feed(10, 3)
+  1. Instantiate your Reader with your account info - Provide subdomain for http://Your-Subdomain.GlueNow.com Account
+    
+        account = Glue::RSS.new("your-account")
         
-3. Get an RSS feed back or HTML page - These Examples are simplified to include most important nodes
+  2. Request posts from the RSS feed - Include an optional limit & page view for paging
+    
+        all_the_posts = account.feed
+        
+      OR
 
-    * A successful RSS response would look like 
+        limited_posts = account.feed(10, 3)
+        
+  3. Receive a Success or Error Hash - Example is simplified to include important nodes
+
+      SUCCESS
     
-        response #=> {"rss"=>{"channel"=>{"item"=>{"pubDate"=>"Fri, 12 Sep 2008 00:00:00 +0000","title"=>"My Title","guid"=>"http://jordandobson.com#14415","dc:creator"=>"Jordan","description"=>"<p>My Body</p>","link"=>"http://jordandobson.com","source"=>"Glue"}}}} 
+        all_the_posts #=> {"rss"=>{"channel"=>{"item"=>{"pubDate"=>"Fri, 12 Sep 2008 00:00:00 +0000","title"=>"My Title","guid"=>"http://jordandobson.com#14415","dc:creator"=>"Jordan","description"=>"<p>Body Text</p>","link"=>"http://jordandobson.com","source"=>"Glue"}}}} 
     
-    * A failed HTML responsed would look like
+      ERROR
     
-        response #=> {"html"=>{"head"=>{"title"=>"GLUE | Web + Mobile Content Publishing"},"body"=>"<p>Webpage Body</p>"}}
+        all_the_posts #=> {}
+        
+        
 
 == REQUIREMENTS:
 
-* Nokogiri & HTTParty
-* Mocha (for tests)
+HTTParty
 
 == INSTALL:
 
-* sudo gem install glue
+sudo gem install glue
 
 == LICENSE:
 
