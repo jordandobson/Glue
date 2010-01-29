@@ -4,3 +4,8 @@
 
   * Birthday!
 
+=== 1.1.1 / 2010-01-29
+
+* 1 major enhancement
+
+  * Fixed Bugs with HTTParty and Glue service

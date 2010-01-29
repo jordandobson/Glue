@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{glue}
-  s.version = "1.1.0"
+  s.version = "1.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jordan Dobson"]
-  s.date = %q{2009-08-25}
+  s.date = %q{2010-01-29}
   s.default_executable = %q{glue}
   s.description = %q{Enables posting to GlueNow.com API service and reading posts from Glue accounts.}
   s.email = ["jordan.dobson@madebysquad.com"]
