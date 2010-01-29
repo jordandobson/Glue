@@ -30,9 +30,8 @@ module Glue
     end
 
     def user_info
-      response = self.class.post(
+      response = self.class.get(
         USER,
-        :query      => {},
         :basic_auth => @auth
       )
       response['rsp'] ? response : {}
