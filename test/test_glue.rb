@@ -5,6 +5,7 @@ require "mocha"
 class TestGlue < Test::Unit::TestCase
 
   def setup
+    @badClient  = Glue::API.new( "notavalidurl", "fail", "fail" )
     @subdomain  = 'AccountSubDomain'
     @username   = 'Username'
     @password   = 'Password'
@@ -19,7 +20,8 @@ class TestGlue < Test::Unit::TestCase
     @lurl       = "http://jordandobson.com"
     @guid       = "#{@lurl}##{@id}"
     @guid2      = "#{@lurl}##{@id2}"
-    @author     = "Jordan"
+    @author     = "Jordan Dobson"
+    @email      = "jordan.dobson@madebysquad.com"
     
     @resp_fail  = {}
     @resp_html  = {"html"=>{"head"=>{"title" => "GLUE | Web + Mobile Publishing"}}}
@@ -28,7 +30,7 @@ class TestGlue < Test::Unit::TestCase
                     "user"    => {
                     "author"  => @author,
                     "admin"   => "true"  ,
-                    "email"   => nil    },
+                    "email"   => @email },
                     "stat"    => "ok"   }}
                     
     @post_ok    = { "rsp"     => {
@@ -118,38 +120,38 @@ class TestGlue < Test::Unit::TestCase
 
   def test_site_is_valid
     @client.stubs(:login_page).returns('<html><body id="login"></body></html>')
-    assert    @client.valid_site?
+    assert         @client.valid_site?
   end
 
   def test_site_is_invalid
     @client.stubs(:login_page).returns('<html><body></body></html>')
-    assert   !@client.valid_site?
+    assert        !@badClient.valid_site?
   end
 
   def test_user_info_valid
-    Glue::API.stubs(:post).returns(@resp_ok)
+    Glue::API.stubs(:get).returns(@resp_ok)
     actual       = @client.user_info
     assert_equal   "ok",     actual["rsp"]["stat"]
     assert                   actual["rsp"]["user"]
-    assert_equal   "Jordan", actual["rsp"]["user"]["author"]
+    assert_equal   @author,  actual["rsp"]["user"]["author"]
     assert_equal   "true",   actual["rsp"]["user"]["admin"]
-    assert_equal   nil,      actual["rsp"]["user"]["email"]
+    assert_equal   @email,   actual["rsp"]["user"]["email"]
   end
 
   def test_user_info_invalid
-    Glue::API.stubs(:post).returns(@resp_html)
-    actual       = @client.user_info
+    Glue::API.stubs(:get).returns(@resp_html)
+    actual       = @badClient.user_info
     assert_equal   @resp_fail, actual
   end
 
   def test_bad_post_response
-    #Glue::API.stubs(:post).returns(@resp_html)
-    actual       = @client.post(@title, @body)
+    Glue::API.stubs(:get).returns(@resp_html)
+    actual       = @badClient.post(@title, @body)
     assert_equal   @resp_fail, actual
   end
 
   def test_good_post_response
-    Glue::API.stubs(:post).returns(@post_ok)
+    Glue::API.stubs(:get).returns(@post_ok)
     actual       = @client.post(@title, @body)
     assert_equal   "ok",     actual["rsp"]["stat"]
     assert                   actual["rsp"]["post"]

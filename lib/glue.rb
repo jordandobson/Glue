@@ -4,7 +4,7 @@ require 'open-uri'
 
 module Glue
 
-  VERSION = '1.0.4'
+  VERSION = '1.1.1'
   DOMAIN  = 'gluenow.com'
 
   class AuthError < StandardError;                   end
@@ -32,24 +32,23 @@ module Glue
     def user_info
       response = self.class.get(
         USER,
-        :basic_auth => @auth
+        { :basic_auth => @auth }
       )
       response['rsp'] ? response : {}
-
     end
 
     def post title, body, *opts
-      response = self.class.post(
+      response = self.class.get(
         POST,
-        :query      =>  {
-        :title      =>  title,
-        :body       =>  body,
-        :draft      =>  opts.include?( :draft  )  ,
-        :author     =>  opts.include?( :author )  },
-        :basic_auth =>  @auth
+        { :query        =>  {
+            :title      =>  title,
+            :body       =>  body,
+            :draft      =>  opts.include?( :draft  )  ,
+            :author     =>  opts.include?( :author )  },
+          :basic_auth   =>  @auth 
+        }
       )
       response['rsp'] ? response : {}
-      
     end
  
   private
