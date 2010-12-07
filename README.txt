@@ -4,7 +4,7 @@ http://GlueNow.com
 
 == DESCRIPTION:
 
-The Glue gem enables posting to GlueNow.com API service using an account subdomain, username, password. In this version you can add a post by providing a title and body. You can access some basic info about a users account and check if their account info is valid and request public posts from an account using the same RSS that powers many of the Glue feeds.
+This Glue gem enables posting to GlueNow.com API service using an account subdomain, username, password. In this version you can add a post by providing a title and body. You can access some basic info about a users account and check if their account info is valid and request public posts from an account using the same RSS that powers many of the Glue feeds.
 
 == FEATURES/PROBLEMS:
 
